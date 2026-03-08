@@ -13,15 +13,20 @@ jobs:
         with:
           xcode-version: latest
 
+      - name: Pre-boot Simulator
+        run: |
+          xcrun simctl boot "iPhone 15" || true
+
       - name: Build App (Simulator Target)
         run: |
-          xcodebuild build \
+          xcodebuild clean build \
             -project asu-app.xcodeproj \
             -scheme asu-app \
             -destination 'platform=iOS Simulator,name=iPhone 15' \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
