@@ -13,16 +13,20 @@ jobs:
         with:
           xcode-version: latest
 
-      - name: Build App
+      - name: Build App (No Signing)
         run: |
-          xcodebuild build-for-testing \
+          xcodebuild build \
             -project asu-app.xcodeproj \
             -scheme asu-app \
             -destination 'generic/platform=iOS' \
-            -derivedDataPath build
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: asu-app-build
+          name: asu-app-unsigned
           path: build/Build/Products/Debug-iphoneos/*.app
